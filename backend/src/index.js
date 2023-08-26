@@ -26,18 +26,13 @@ const fetchWeather = async () => {
 };
 
 router.get('/api/weather', async ctx => {
-  console.log('Received a request to /api/weather');
   const weatherData = await fetchWeather();
+  console.log('hello');
 
   ctx.type = 'application/json; charset=utf-8';
   ctx.body = weatherData.weather ? weatherData.weather[0] : {};
 });
 
-router.get('/tester', async ctx => {
-  ctx.set('Access-Control-Allow-Origin', '*');
-  ctx.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  ctx.body = 'Hello, world! This is the /tester route.';
-});
 
 app.use(router.routes());
 app.use(router.allowedMethods());

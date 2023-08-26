@@ -7,5 +7,10 @@ services:
   backend:
     container_name: weatherapp-backend
     build: backend/
+    command: npm run start
     ports:
       - "9000:9000"
+    volumes:
+      - backend:/usr/src/app/src/src
+volumes:
+    backend:
