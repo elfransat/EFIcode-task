@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 
 const TransferWebpackPlugin = require('transfer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -29,7 +30,7 @@ module.exports = {
     contentBase: 'src/public',
     historyApiFallback: true,
     disableHostCheck: true,
-    host: process.env.HOST || 'localhost',
+    host: process.env.HOST || '0.0.0.0',
     port: process.env.PORT || 3000,
   },
   output: {
@@ -63,5 +64,6 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new TransferWebpackPlugin([{ from: 'src/public' }], '.'),
     new webpack.DefinePlugin(GLOBALS),
+    new Dotenv()
   ],
 };
