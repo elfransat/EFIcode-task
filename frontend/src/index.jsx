@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import Forecast from './Forecast'
 require('dotenv').config()
 
 
 
 const baseURL = process.env.ENDPOINT;
 
-const getWeatherFromApi = async () => {
+const getWeatherFromApi = async (latitude, longitude) => {
   try {
-    const response = await fetch(`${baseURL}/api/weather`);
+    const response = await fetch(`${baseURL}/api/weather?latitude=${latitude}&longitude=${longitude}`);
     return response.json();
   } catch (error) {
     console.error(error);
@@ -17,30 +18,52 @@ const getWeatherFromApi = async () => {
   return {};
 };
 
-class Weather extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      icon: "",
-    };
+const getForecastFromAPI = async (latitude, longitude) => {
+  try {
+    const response = await fetch(`${baseURL}/api/forecast?latitude=${latitude}&longitude=${longitude}`);
+    return response.json();
+  } catch (error) {
+    console.error(error);
   }
 
-  async componentDidMount() {
-    const weather = await getWeatherFromApi();
-    this.setState({icon: weather.icon.slice(0, -1)});
-  }
+  return {};
+};
 
-  render() {
-    const { icon } = this.state;
+function Weather() {
+  const [weather, setWeather] = useState({});
+  const [forecast, setForecast] = useState([]);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const lattitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      getWeatherFromApi(lattitude, longitude).then((response) => {
+        setWeather(response)
+       });
+      getForecastFromAPI(lattitude, longitude).then((response) => {
+        setForecast(response)
+      })
+    });
+  },[]);
+  
+    const weatherIcon = weather?.icon?.slice(0, -1);
+
+    const UpcomingForecast = forecast
+    .map((forecast) => <Forecast key={forecast.dt} forecast={forecast} />);
+
+
 
     return (
+      <div className='weather'>
       <div className="weatherIcon">
-        { icon && <img src={`/img/${icon}.svg`} /> }
+        { weatherIcon && <img src={`/img/${weatherIcon}.svg`} /> }
       </div>
+      <div className='forecast'>
+        {UpcomingForecast}
+      </div>
+      </div>    
     );
   }
-}
 
 ReactDOM.render(
   <Weather />,

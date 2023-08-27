@@ -12,3 +12,8 @@ body{
   width: 30vw;
   height: 30vw;
 }
+
+.forecast {
+  display: flex;
+  position: absolute;
+}
