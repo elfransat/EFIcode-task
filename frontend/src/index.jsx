@@ -5,7 +5,7 @@ require('dotenv').config()
 
 
 
-const baseURL = process.env.ENDPOINT;
+const baseURL = 'http://ec2-13-48-44-231.eu-north-1.compute.amazonaws.com:9000';
 
 const getWeatherFromApi = async (latitude, longitude) => {
   try {
