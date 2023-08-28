@@ -33,7 +33,7 @@ function Weather() {
   const [weather, setWeather] = useState({});
   const [forecast, setForecast] = useState([]);
 
-  useEffect(() => {
+  useEffect(() => {s
     navigator.geolocation.getCurrentPosition((position) => {
       const lattitude = position.coords.latitude;
       const longitude = position.coords.longitude;
